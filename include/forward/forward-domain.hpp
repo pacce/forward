@@ -19,7 +19,7 @@ namespace forward {
                 nodes_->reserve(mesh.nodes.size());
                 for (const auto& [_, node] : mesh.nodes) { nodes_->push_back(node); }
 
-                for (const auto& [_, e] : mesh.element) {
+                for (const auto& [_, e] : mesh.elements) {
                     using mesh::element::Type;
 
                     if (e.type == Type::TRIANGLE3) {
