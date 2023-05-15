@@ -1,0 +1,6 @@
+[wrap-git]
+url         = git@github.com:pacce/geometry.git
+revision    = head
+
+[provide]
+geometry = geometry_dep

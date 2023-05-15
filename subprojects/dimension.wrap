@@ -1,0 +1,6 @@
+[wrap-git]
+url         = git@github.com:pacce/dimension.git
+revision    = head
+
+[provide]
+dimension = dimension_dep
