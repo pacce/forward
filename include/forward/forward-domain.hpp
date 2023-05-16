@@ -4,6 +4,7 @@
 #include <mesh/mesh.hpp>
 #include <memory>
 
+#include "forward-electrode.hpp"
 #include "forward-element.hpp"
 #include "forward-point.hpp"
 
@@ -42,6 +43,8 @@ namespace forward {
                     } else if (tag == tags[CENTER]) {
                         center_ = nodes_->at(e.nodes[0] - 1);
                     } else if (tag == tags[ELECTRODES]) {
+                        electrode::Point point(e.nodes[0] - 1);
+                        electrodes_.push_back(point);
                     } else {
                     }
                 }
@@ -75,9 +78,11 @@ namespace forward {
             }
 
             std::shared_ptr<Points<T>>  nodes_;
-            Centroid<T>                 center_;
 
-            Elements                    elements_;
+            Centroid<T> center_;
+
+            Electrodes  electrodes_;
+            Elements    elements_;
     };
 } // namespace forward
 
