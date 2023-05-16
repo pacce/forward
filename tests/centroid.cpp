@@ -8,12 +8,18 @@ TEST(Centroid, Simple) {
         , {2, mesh::Node<float>(1.0f, 0.0f, 0.0f)}
         , {3, mesh::Node<float>(1.0f, 1.0f, 0.0f)}
         , {4, mesh::Node<float>(0.0f, 1.0f, 0.0f)}
+        , {5, mesh::Node<float>(0.5f, 0.5f, 0.0f)}
     };
     mesh::element::Map elements = {
           {1, {mesh::element::Type::TRIANGLE3, {1}, {1, 2, 4}}}
         , {2, {mesh::element::Type::TRIANGLE3, {1}, {2, 3, 4}}}
+        , {3, {mesh::element::Type::POINT1, {2}, {5}}}
     };
-    mesh::Mesh<float> mesh      = {{2.2, 0, 8}, {}, nodes, elements};
+    mesh::physical::Entities entities   = {
+          mesh::physical::Entity{2, 1, "domain"}
+        , mesh::physical::Entity{0, 2, "center"}
+    };
+    mesh::Mesh<float> mesh      = {{2.2, 0, 8}, entities, nodes, elements};
 
     forward::Domain<float> domain(mesh);
     forward::Centroids<float> expected  = {

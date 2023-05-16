@@ -2,25 +2,34 @@
 #define FORWARD_INCLUSION_HPP__
 
 #include <dimension/dimension.hpp>
-#include <geometry/geometry.hpp>
+
+#include "forward-point.hpp"
 
 namespace forward {
 namespace inclusion {
     template <typename T>
     class Circular {
         public:
-            Circular(const geometry::d2::Point<T>& center, const dimension::radius& radius) 
+            Circular(const Point<T>& center, const Normal<T>& n, const dimension::radius& radius)
                 : center_(center)
+                , normal_(n.normalized())
                 , radius_(radius)
             {}
 
             bool
-            contains(const geometry::d2::Point<T>& p) {
+            contains(const Point<T>& q) {
+                Point<T> p = this->closest(q);
                 return (p - center_).norm() < radius_;
             }
         private:
-            geometry::d2::Point<T>  center_;
-            dimension::radius       radius_;
+            Point<T>
+            closest(const Point<T>& q) {
+                return q - ((q - center_).dot(normal_) * normal_);
+            }
+
+            Point<T>            center_;
+            Normal<T>           normal_;
+            dimension::radius   radius_;
     };
 } // namespace inclusion
 } // namespace forward

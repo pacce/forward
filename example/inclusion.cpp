@@ -31,10 +31,9 @@ main(int argc, char** argv) {
         } else if (vm.count("mesh")) {
             std::filesystem::path path = vm["mesh"].as<std::filesystem::path>();
             forward::Domain<float> domain(path);
-            forward::Centroids<float> cs = domain.centroids();
-            for (const forward::Centroid<float>& c : cs) {
-                std::cout << c << std::endl;
-            }
+
+            forward::Point<float> center    = domain.center();
+            forward::Point<float> normal    = forward::Point<float>::zaxis();
         }
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
