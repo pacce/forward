@@ -39,6 +39,22 @@ namespace element {
             return c;
         }
     };
+
+    template <typename T>
+    struct Normal {
+        std::shared_ptr<Points<T>> nodes;
+
+        forward::Normal<T>
+        operator()(const Triangle& triangle) const {
+            const Point<T>& p0 = (*nodes)[triangle.nodes[0]];
+            const Point<T>& p1 = (*nodes)[triangle.nodes[1]];
+            const Point<T>& p2 = (*nodes)[triangle.nodes[2]];
+
+            Point<T> u = (p1 - p0);
+            Point<T> v = (p2 - p0);
+            return u.cross(v).normalized();
+        }
+    };
 } // namespace element
 } // namespace forward
 

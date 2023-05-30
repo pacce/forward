@@ -19,7 +19,7 @@ namespace inclusion {
             bool
             contains(const Point<T>& q) {
                 Point<T> p = this->closest(q);
-                return (p - center_).norm() < radius_;
+                return (p - center_).norm() < static_cast<T>(radius_);
             }
         private:
             Point<T>
