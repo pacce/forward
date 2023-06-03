@@ -4,7 +4,7 @@ compiler      = meson.get_compiler('cpp')
 sources       = []
 include       = include_directories('include')
 dependencies  = [
-  dependency('dimension')
+    dependency('dimension')
   , dependency('geometry')
   , dependency('mesh')
   ]
