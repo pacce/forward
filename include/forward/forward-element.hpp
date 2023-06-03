@@ -46,8 +46,7 @@ namespace element {
         template <typename T>
         T
         area(const forward::Points<T>& ps) const {
-            forward::Normal<T> n = this->normal(ps);
-            return n.norm() * 0.5;
+            return this->normal(ps).norm() * 0.5;
         }
 
         template <typename T>

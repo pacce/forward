@@ -1,4 +1,6 @@
 #include <boost/program_options.hpp>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <filesystem>
 #include <forward/forward.hpp>
 #include <iostream>
@@ -52,10 +54,10 @@ namespace converter {
     template <typename T>
     forward::Domain<T>
     domain(const mesh::Mesh<T>& mesh) {
-            forward::Points<float> ns   = converter::nodes<float>(mesh);
-            forward::Elements es        = converter::elements<float>(mesh);
+        forward::Points<float> ns   = converter::nodes<float>(mesh);
+        forward::Elements es        = converter::elements<float>(mesh);
 
-            return forward::Domain<T>(ns, es);
+        return forward::Domain<T>(ns, es);
     }
 } // namespace converter
 
@@ -86,30 +88,15 @@ main(int argc, char** argv) {
             std::filesystem::path path      = vm["mesh"].as<std::filesystem::path>();
             forward::Domain<float> domain   = converter::domain<float>(mesh::decode<float>(path));
 
-            // forward::Point<float> center    = domain.center();
-            // dimension::radius radius        = domain.radius() * 0.1f;
-            // forward::Point<float> normal    = forward::Point<float>::zaxis();
-            // forward::inclusion::Circular<float> circle(center, normal, dimension::radius{radius});
+            std::size_t nodes       = domain.nodes().size();
+            std::size_t elements    = domain.elements().size();
 
-            forward::Centroids<float> cs    = domain.centroids();
+            std::vector<float> zs(elements, 1.0f);
+            std::map<forward::element::Pair, float> vs = domain.stiffness(zs);
 
-            // std::ofstream view("view.msh");
-            // if (not view.is_open()) { throw std::runtime_error("could not create view"); }
-            // view << "$ElementData"      << '\n';
-            // view << "1"                 << '\n';
-            // view << "Inclusion"         << '\n';
-            // view << "1"                 << '\n';
-            // view << "0.0"               << '\n';
-            // view << "3"                 << '\n';
-            // view << "0"                 << '\n';
-            // view << "1"                 << '\n';
-            // view << cs.size()           << '\n';
-            // view << "$EndElementData"   << '\n';
-            // view.close();
-
-            // for (const forward::Centroid<float>& c : cs) {
-            //     std::cout << circle.contains(c) << std::endl;
-            // }
+            Eigen::SparseMatrix<float> ks(nodes, nodes);
+            ks.reserve(vs.size());
+            for (const auto& [k, v] : vs) { ks.insert(k.first, k.second) = v; }
         }
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;

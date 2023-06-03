@@ -5,6 +5,7 @@ sources       = []
 include       = include_directories('include')
 dependencies  = [
     dependency('dimension')
+  , dependency('eigen3')
   , dependency('geometry')
   , dependency('mesh')
   ]
